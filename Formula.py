@@ -3,7 +3,7 @@
 
 class Formula:
     def __init__(self, str):
-        self.string_f = self.init_replace(str)
+        self.string_f = str
         self.logic_const = ('0', '1',)
         self.lat_alph = (
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
@@ -12,7 +12,7 @@ class Formula:
         self.negation = '!'
         self.conjunction = '*'
         self.disjunction = '+'
-        self.emplication = '-'
+        self.emplication = '@'
         self.equivalent = '~'
         self.open_bracket = '('
         self.close_brack = ')'
@@ -39,6 +39,10 @@ class Formula:
         return dict_ind_bracket
 
     def main(self):
+        if self.init_replace(self.string_f) != False:
+            self.string_f = self.init_replace(self.string_f)
+        else:
+            return False
         if self.check_symbols == False or self.check_empty() == False:
                 return False
         if not self.atomic_formula(self.string_f):
@@ -143,14 +147,17 @@ class Formula:
                 return False
         return True
 
-#(A\/\A)
+#(A\/\A) (A/\/A)
 
     @staticmethod
     def init_replace(inp_str: str) -> str:
+        if inp_str.__contains__("*") or inp_str.__contains__('+') or inp_str.__contains__('@'):
+            return False
+        
         inp_str = inp_str.replace('\/', '+')
         
         inp_str = inp_str.replace('/\\', '*')
         
-        inp_str = inp_str.replace('->', '-')
+        inp_str = inp_str.replace('->', '@')
         
         return inp_str
